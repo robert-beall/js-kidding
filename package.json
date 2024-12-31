@@ -1,0 +1,19 @@
+{
+  "name": "js-kidding",
+  "version": "1.0.0",
+  "description": "A simple knowledge-hub repo for plain JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robert-beall/js-kidding.git"
+  },
+  "author": "Robert Beall",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robert-beall/js-kidding/issues"
+  },
+  "homepage": "https://github.com/robert-beall/js-kidding#readme"
+}
