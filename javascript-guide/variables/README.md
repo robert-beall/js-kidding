@@ -7,11 +7,15 @@ Variables serve as symbolic names for values in a program.
       - [Basic Usage](#basic-usage)
       - [Scope](#scope)
         - [Unscoped Block Statements](#unscoped-block-statements)
-      - [Scoping in Scripts](#scoping-in-scripts)
-      - [Scoping in Modules](#scoping-in-modules)
-    - [Hoisting](#hoisting)
-      - [Hoisting in Scripts](#hoisting-in-scripts)
-    - [Redeclarations](#redeclarations)
+        - [Scoping in Scripts](#scoping-in-scripts)
+        - [Scoping in Modules](#scoping-in-modules)
+      - [Hoisting](#hoisting)
+        - [Hoisting in Scripts](#hoisting-in-scripts)
+      - [Redeclarations](#redeclarations)
+        - [Redeclaration without Reassignment](#redeclaration-without-reassignment)
+        - [Redeclaration with Reassignment](#redeclaration-with-reassignment)
+        - [Function Declarations](#function-declarations)
+        - [Interactions with `let`, `const`, `class`, and `import`](#interactions-with-let-const-class-and-import)
 
 
 ## Naming
@@ -47,19 +51,75 @@ Other block statements, including `try...catch`, `switch`, and control flow bloc
 
 Variables declared in these blocks can continue to be referenced outside of these blocks.
 
-#### Scoping in Scripts
+##### Scoping in Scripts
 In a script, top-level variables declared using `var` are added as non-configurable properties of the [global object](https://developer.mozilla.org/en-US/docs/Glossary/Global_object).
 
-#### Scoping in Modules
+##### Scoping in Modules
 In NodeJs CommonJS modules and native ECMAScript Modules, top-level variables are scoped to the module and not added to the global object.
 
-### Hoisting
+#### Hoisting
 Var declarations are processed before before execution. Declaring a variable anywhere in the code is equivalent to declaring it at the top of its scope.
 
 A variable can be accessed before its declared, technically, but it will be considered undefined (but declared) until assignment. Assignment statements are **not hoisted**.
 
-#### Hoisting in Scripts
+##### Hoisting in Scripts
 For scripts, var declarations are only hoisted to the top of their respective scripts.
 
-### Redeclarations
-STUB
+#### Redeclarations
+Duplicate declarations using `var` will not trigger an error, even in [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode). The variable will not lose its value, unless the declaration has an assignment. 
+
+##### Redeclaration without Reassignment
+```
+var a = 2;
+var a; // a = 2
+```
+
+##### Redeclaration with Reassignment
+```
+var a = 2;
+var a = 5; // now a = 5
+```
+
+##### Function Declarations
+`var` declarations in the same scope as a function declarations take precedent, overriding the function declaration.
+
+This happens because function declarations are hoisted above any variable declarations, causing the later variable initializer to overwrite the function.
+
+```
+var a = 2;
+
+function a(i) {
+  return i+1;
+}
+
+console.log(a); // a = 2
+```
+
+##### Interactions with `let`, `const`, `class`, and `import`
+`var` declarations **cannot** be in the same scope as `let`, `const`, `class`, and `import` declarations.
+
+```
+var a;
+let a; <-- This throws an error
+```
+
+Remember that `var` declarations are not scoped to blocks, making this invalid as well:
+
+```
+let a = 1;
+
+{
+  var a = 2;
+}
+```
+
+However, the reverse is allowable because `let` is scoped to a block: 
+
+```
+var a = 1;
+
+{
+  let a = 2;
+}
+```
+
