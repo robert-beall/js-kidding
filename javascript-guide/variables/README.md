@@ -16,6 +16,15 @@ Variables serve as symbolic names for values in a program.
         - [Redeclaration with Reassignment](#redeclaration-with-reassignment)
         - [Function Declarations](#function-declarations)
         - [Interactions with `let`, `const`, `class`, and `import`](#interactions-with-let-const-class-and-import)
+        - [Within a Function Body](#within-a-function-body)
+        - [Within a Catch Block](#within-a-catch-block)
+    - [let](#let)
+      - [Basic Usage](#basic-usage-1)
+      - [Scope](#scope-1)
+        - [Curly-Braced-Syntax](#curly-braced-syntax)
+        - [Outside of Curly Braces](#outside-of-curly-braces)
+      - [Differences with Var](#differences-with-var)
+      - [Temporal Dead Zone (TDZ)](#temporal-dead-zone-tdz)
 
 
 ## Naming
@@ -123,3 +132,64 @@ var a = 1;
 }
 ```
 
+##### Within a Function Body
+A var declaration within a function body can have the same name as a parameter, in which case it will override the parameter value:
+
+```
+function log(a) {
+  var a = 1;
+  console.log(a);
+}
+
+log(2); // will log '1'
+```
+
+##### Within a Catch Block
+A var declaration within a catch block can have the same name as the catch-bound identifier, but only if the catch binding is a simple identifier, not a destructuring pattern. In this case, the var declaration is hoisted above the catch block, but any value assigned in the catch block is not visible outside of it.
+
+```
+try {...}
+catch (e) {
+  var e = 2; // allowable
+}
+
+console.log(e); // will log 'undefined'
+```
+
+### let
+`let` is used to declare *block-scoped* local variables.
+
+#### Basic Usage
+```
+let a = 1;
+
+{
+  let a = 2;
+  console.log(a); // 2
+}
+
+console.log(a); // 1
+```
+
+#### Scope
+##### Curly-Braced-Syntax
+A `let` declared variable will be scoped to the most immediate following syntax that encloses it:
+- `block` Statement 
+- `switch` Statement
+- `try...catch` Statement
+- Control flow statements (`for`, `while`, etc.) if the `let` is in the header of the statement.
+- Function Body
+- Static Initialization Block 
+##### Outside of Curly Braces 
+If a `let` statement is not constrained to a curly braced syntax, it is scoped to one of the following that applies:
+- If in module mode, the **current module**
+- If in script mode, the **global scope**
+#### Differences with Var
+- Scoped to **blocks** as well as functions
+- Can only be accessed **after** the place of declaration is reached (commonly considered **non-hoisted**).
+- **Do not** create properties on `globalThis` when declared at the top-level of a script
+- **Cannot be redeclared** in the same scope level.
+- You cannot use a let as a lone statement in the body of a block
+  - This is pointless anyways as the declared variable can never be accessed.
+#### Temporal Dead Zone (TDZ)
+- 
