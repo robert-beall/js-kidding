@@ -156,7 +156,7 @@ catch (e) {
 console.log(e); // will log 'undefined'
 ```
 
-### let
+### [let](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)
 `let` is used to declare *block-scoped* local variables.
 
 #### Basic Usage
