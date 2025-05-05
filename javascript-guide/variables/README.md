@@ -67,7 +67,7 @@ In a script, top-level variables declared using `var` are added as non-configura
 In NodeJs [CommonJS](https://nodejs.org/docs/latest/api/modules.html#modules-commonjs-modules) modules and native [ECMAScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) Modules, top-level variables are scoped to the module and not added to the global object.
 
 #### Hoisting
-Var declarations are processed before before execution. Declaring a variable anywhere in the code is equivalent to declaring it at the top of its scope.
+Var declarations are processed before execution. Declaring a variable anywhere in the code is equivalent to declaring it at the top of its scope.
 
 A variable can be accessed before its declared, technically, but it will be considered undefined (but declared) until assignment. Assignment statements are **not hoisted**.
 
