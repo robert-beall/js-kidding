@@ -25,6 +25,7 @@ Variables serve as symbolic names for values in a program.
         - [Outside of Curly Braces](#outside-of-curly-braces)
       - [Differences with Var](#differences-with-var)
       - [Temporal Dead Zone (TDZ)](#temporal-dead-zone-tdz)
+      - [Redeclarations](#redeclarations-1)
 
 
 ## Naming
@@ -184,12 +185,99 @@ A `let` declared variable will be scoped to the most immediate following syntax 
 If a `let` statement is not constrained to a curly braced syntax, it is scoped to one of the following that applies:
 - If in module mode, the **current module**
 - If in script mode, the **global scope**
+
 #### Differences with Var
-- Scoped to **blocks** as well as functions
+Variables declared with let
+- Are scoped to **blocks** as well as functions
 - Can only be accessed **after** the place of declaration is reached (commonly considered **non-hoisted**).
 - **Do not** create properties on `globalThis` when declared at the top-level of a script
 - **Cannot be redeclared** in the same scope level.
 - You cannot use a let as a lone statement in the body of a block
   - This is pointless anyways as the declared variable can never be accessed.
+
 #### Temporal Dead Zone (TDZ)
-- 
+A variable declared with `let`, `const`, or `class` will throw a [ReferenceError](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError) if accessed before it has been initialized with a value. The section of code from the start of a block to where the variable has been declared and initialized is known as the Temporal Dead Zone(TDZ). 
+
+The variable is initialized with a value once the declaration has been reached in the code. 
+
+Meanwhile, variables declared with var will be `undefined` when accessed before declaration.
+
+This behavior can be viewed in the code snippet below:
+
+```
+{
+    /** Temporal Dead Zone */
+    console.log(a); // undefined
+    console.log(b); // ReferenceError
+    /** End TDZ */
+
+    var a;
+    let b; 
+
+    // After Declaration, Before Initialization
+    console.log(b); // undefined
+    b = 2;
+    // After Declaration, After Initialization
+    console.log(b); // 2
+}
+```
+
+The TDZ is "temporal" because it is determined by execution time, not placement in the code. The following code will not throw a reference error:
+
+```
+{ // TDZ starts at beginning of scope
+  /** function f defined in TDZ but not called. */
+  const f = () => console.log(l); 
+  
+  /** TDZ ends after 'l' declared and initialized. */
+  let l = 'A';
+  f(); // function call comes after TDZ ends.
+} 
+```
+
+The `typeof` operator will throw a reference error for a variable in its TDZ. By contrast, using `typeof` on undeclared variables will result in `undefined`.
+
+#### Redeclarations
+`let` declarations cannot be in the same scope as any other declaration (`let`, `const`, `class`, `function`, `var`, `import`).
+
+Unlike with `var`, a `let` declaration inside a function cannot share the same name as a parameter. Likewise, a `let` declaration in a catch block cannot have the same name as the catch-bound identifier. 
+
+```
+function f(a) {
+  let a = 'b'; // Throws a SyntaxError
+}
+
+try {
+  ...
+} catch (e) {
+  let e; // Also throws a SyntaxError
+}
+```
+
+Errors may also be encountered with switch statements, which encompass a single block by default: 
+
+```
+switch (a) {
+  case 0: 
+    let b;
+    break;
+  case 1:
+    let b; // SyntaxError (b already declared in the switch scope)
+    break
+}
+```
+
+To fix this issue, wrap each case in its own block:
+
+```
+switch (a) {
+  case 0: {
+    let b;
+    break;
+  }
+  case 1: {
+    let b; // no error
+    break; 
+  }
+}
+```
