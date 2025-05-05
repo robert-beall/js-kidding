@@ -64,7 +64,7 @@ Variables declared in these blocks can continue to be referenced outside of thes
 In a script, top-level variables declared using `var` are added as non-configurable properties of the [global object](https://developer.mozilla.org/en-US/docs/Glossary/Global_object).
 
 ##### Scoping in Modules
-In NodeJs CommonJS modules and native ECMAScript Modules, top-level variables are scoped to the module and not added to the global object.
+In NodeJs [CommonJS](https://nodejs.org/docs/latest/api/modules.html#modules-commonjs-modules) modules and native [ECMAScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) Modules, top-level variables are scoped to the module and not added to the global object.
 
 #### Hoisting
 Var declarations are processed before before execution. Declaring a variable anywhere in the code is equivalent to declaring it at the top of its scope.
