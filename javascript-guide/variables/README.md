@@ -26,6 +26,7 @@ Variables serve as symbolic names for values in a program.
       - [Differences with Var](#differences-with-var)
       - [Temporal Dead Zone (TDZ)](#temporal-dead-zone-tdz)
       - [Redeclarations](#redeclarations-1)
+      - [Top Level Declarations](#top-level-declarations)
 
 
 ## Naming
@@ -281,3 +282,6 @@ switch (a) {
   }
 }
 ```
+
+#### Top Level Declarations
+At the top level of programs and functions, `let` does not create a property on the global object, while `var` does.
