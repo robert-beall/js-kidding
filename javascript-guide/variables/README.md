@@ -30,6 +30,15 @@ Variables serve as symbolic names for values in a program.
       - [Scoping Rules](#scoping-rules)
       - [TDZ and Lexical Scoping](#tdz-and-lexical-scoping)
       - [Declaration with destructuring](#declaration-with-destructuring)
+    - [const](#const)
+      - [Syntax](#syntax)
+      - [Similarities with `let`](#similarities-with-let)
+      - [Unique qualities of `const`](#unique-qualities-of-const)
+        - [Immutable Binding, Not Immutable Value](#immutable-binding-not-immutable-value)
+        - [Required Initialization](#required-initialization)
+        - [When to use `const`](#when-to-use-const)
+        - [Binding](#binding)
+      - [`const` with objects and arrays](#const-with-objects-and-arrays)
 
 
 ## Naming
@@ -365,4 +374,82 @@ const arr = ['a', 'b', 'c'];
 let [a, b, c] = result;
 
 console.log(b); // 'b'
+```
+
+### const
+The `const` declaration is used to declare constant, block-scoped local variables. A `const` is like a `let` that cannot be changed after initial assignment.
+
+**NOTE:** If a constant is an object, its properties can be added, updated, or removed. 
+
+#### Syntax 
+```
+// s cannot be reassigned to a different value
+const s = 'foo'; 
+```
+
+#### Similarities with `let`
+const declarations 
+
+- are scoped to blocks and functions
+- Have a temporal dead zone
+- do not create properties on [globalThis](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis) when declared at the top level of a script.
+- cannot be redeclaredin the same scope.
+- cannot be used as the sole body of a block (since there is no way to access the const)
+  ```
+  if (a) const b = 1; // SyntaxError
+  ```
+
+#### Unique qualities of `const`
+
+##### Immutable Binding, Not Immutable Value
+A constant creates an *immutable* reference to a value. The value referenced, however, is not immutable and can be changed. It **creates an immutable binding, not an immutable value.**
+
+##### Required Initialization
+A `const` declared variable **requires initialization**.
+
+```
+// Correct
+const B = 'b';
+
+// Incorrect (Throws a SyntaxError)
+const A;  
+```
+
+##### When to use `const`
+It is generally considered best practice to use `const` over `let` when a variable is not going to be reassigned in its scope. This makes the intent surrounding the variable clear and prevents unintended changes to the variable. 
+
+##### Binding
+The list that follows the `const` keyword is called a [binding list](https://developer.mozilla.org/en-US/docs/Glossary/Binding). It is separated by commas (which are not the [comma operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Comma_operator)) and the `=` sign (which is not an [assignment operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Assignment)). This can be a little confusing, so just remember that the `const` declarator creates a **reference**, not a value.
+
+Initializers of later variables can refer to earlier variables in the binding list. 
+
+#### `const` with objects and arrays
+You cannot reassign a constant initialized to an object or array: 
+
+```
+const OBJ = { a: '1', b: '2' };
+
+OBJ = { c: '3' };
+```
+
+This **DOES NOT** make referenced object or array immutable. The following is allowed:
+
+```
+const OBJ = { a: '1' };
+
+OBJ.b = '2';
+```
+
+To make an object immutable, you must use [`Object.freeze(...)`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze).
+
+The same applies to arrays:
+
+```
+const ARR = [];
+
+// illegal
+ARR = [1];
+
+// allowed
+ARR.push(2);
 ```
