@@ -27,6 +27,9 @@ Variables serve as symbolic names for values in a program.
       - [Temporal Dead Zone (TDZ)](#temporal-dead-zone-tdz)
       - [Redeclarations](#redeclarations-1)
       - [Top Level Declarations](#top-level-declarations)
+      - [Scoping Rules](#scoping-rules)
+      - [TDZ and Lexical Scoping](#tdz-and-lexical-scoping)
+      - [Declaration with destructuring](#declaration-with-destructuring)
 
 
 ## Naming
@@ -285,3 +288,81 @@ switch (a) {
 
 #### Top Level Declarations
 At the top level of programs and functions, `let` does not create a property on the global object, while `var` does.
+
+```
+var a = 'test';
+let b = 'testing';
+
+console.log(this.a); // 'test'
+console.log(this.b); // undefined
+```
+
+#### Scoping Rules
+Whereas variables declared using `var` are scoped to an enclosing function, variables declared using `let` are scoped to the nearest block. For example:
+
+```
+// 'a' is the same variable throughout.
+function withVar() {
+  var a = 0;
+
+  {
+    var a = 1;
+    console.log(a); // 1
+  }
+
+  console.log(a); // 1
+}
+```
+
+With let, each new `let` declaration in a nested block is treated as a different variable.
+
+```
+function withTest() {
+  let b = 0;
+
+  {
+    let b = 1; // this declares a new variable
+    console.log(b); // 1
+  }
+
+  console.log(b); // 0 (the first b declared in the outer scope)
+}
+```
+
+#### TDZ and Lexical Scoping
+A declaration using `let` supersedes any definition in an outer scope in the block it is defined within. This can lead to unexpected `ReferenceError`s. 
+
+For example:
+
+```
+var x = 1;
+
+if (x) {
+  let x = x + 20; // ReferenceError
+}
+```
+
+In this example, the `let` declared `x` supersedes the `var` declaration within the if statement, and thus the arithmetic on `x` involves an illegal access of the `let` defined variable within its temporal dead zone. 
+
+A similar situation can occur with control flow statements:
+
+```
+var arr = { x: [1, 2, 3] };
+
+for (let arr of arr.x) { // ReferenceError
+  console.log(arr);
+}
+```
+
+The `let` declared `arr` is scoped to the for-block.  
+
+#### Declaration with destructuring
+The left side of a `=` can be a [binding pattern](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring#binding_and_assignment), allowing for the creation of multiple variables at once.
+
+```
+const arr = ['a', 'b', 'c'];
+
+let [a, b, c] = result;
+
+console.log(b); // 'b'
+```
