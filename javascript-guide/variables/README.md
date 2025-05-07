@@ -39,6 +39,13 @@ Variables serve as symbolic names for values in a program.
         - [When to use `const`](#when-to-use-const)
         - [Binding](#binding)
       - [`const` with objects and arrays](#const-with-objects-and-arrays)
+  - [Data structures and types](#data-structures-and-types)
+    - [Primitive Types](#primitive-types)
+    - [Objects](#objects)
+      - [Keys](#keys)
+    - [Functions](#functions)
+    - [Dynamic Typing and Data Conversion](#dynamic-typing-and-data-conversion)
+    - [Numbers and the `+` operator](#numbers-and-the--operator)
 
 
 ## Naming
@@ -453,3 +460,65 @@ ARR = [1];
 // allowed
 ARR.push(2);
 ```
+
+## Data structures and types
+ECMAScript standard defines 8 data types.
+
+### [Primitive Types](https://developer.mozilla.org/en-US/docs/Glossary/Primitive)
+A **primitive** is data that is *not an object* and has no *methods* or *properties*. 
+
+Primitives are immutable, meaning their values cannot be changed. A variable may be reassigned to a different value, but the underlying value cannot be altered.
+
+Primitives have no methods, but behave as if they do. This is because JavaScript *auto-boxes* the value into a wrapper object. Any methods or properties accessed from a primitive are actually accessed from the wrapping object. 
+
+The primitive types in JavaScript are:
+
+1. [Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#variables:~:text=are%20primitives%3A-,Boolean,-.%20true%20and): `true` or `false`
+2. [null](https://developer.mozilla.org/en-US/docs/Glossary/Null): special keyword denoting a null value. **NOTE:** JavaScript is case-sensitive, and null must be all undercase. 
+     - **Fun Fact:** while `null` is a primitive, using `typeof` on it returns "object". This is a bug, but it cannot be fixed because too many scripts would be broken by it.
+3. [undefined](https://developer.mozilla.org/en-US/docs/Glossary/Undefined): A primitive assigned to variables that have been declared, but not initialized, or to formal function arguments for which there are no actual arguments:
+    ```
+      let a;
+      console.log(a); // undefined
+
+      function x(y) {
+        if (typeof y == 'undefined') {
+          return 1;
+        } 
+
+        return 0;
+      }
+
+      /* 
+       * function x takes an argument, but we don't want to
+       * pass in an actual value.
+       */
+      x(undefined); 
+    ```
+4. [Number](https://developer.mozilla.org/en-US/docs/Glossary/Number): integer or floating point number. In JavaScript, all numbers are in the [double-precision 64-bit floating point format](https://en.wikipedia.org/wiki/Double_precision_floating-point_format).
+5. [BigInt](https://developer.mozilla.org/en-US/docs/Glossary/BigInt): integer with [arbitrary precision](https://en.wikipedia.org/wiki/Arbitrary-precision_arithmetic) (e.g. `900000342143899n`).
+6. [String](https://developer.mozilla.org/en-US/docs/Glossary/String): sequence of text characters.
+7. [Symbol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol): A unique, immmutable data type.
+
+### [Objects](https://developer.mozilla.org/en-US/docs/Glossary/Object)
+
+Objects are a collection of properties. These properties can be of any type, including other objects. Properties are identified with *key* values.
+
+#### Keys
+Keys can either be`String` or `Symbol` values.
+
+### [Functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions)
+
+Functions are procedures a script or module can perform. They are technically a kind of object, but are generally treated separately.
+
+### Dynamic Typing and Data Conversion
+JavaScript is *dynamically typed*, meaning that a variable's type does not need to be specified when it is declared. Data types are automatically converted during script execution as needed. As such, the following is completely legal:
+
+```
+let a = 2;
+
+a = "B";
+```
+
+### [Numbers and the `+` operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#numbers_and_the_operator)
+STUB
