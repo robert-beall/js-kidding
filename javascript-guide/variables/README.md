@@ -1,6 +1,6 @@
-# [Variables](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#variables)
+# [Grammar and Types](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#variables)
 Variables serve as symbolic names for values in a program.
-- [Variables](#variables)
+- [Grammar and Types](#grammar-and-types)
   - [Naming](#naming)
   - [Declaration](#declaration)
     - [var](#var)
@@ -45,7 +45,25 @@ Variables serve as symbolic names for values in a program.
       - [Keys](#keys)
     - [Functions](#functions)
     - [Dynamic Typing and Data Conversion](#dynamic-typing-and-data-conversion)
-    - [Numbers and the `+` operator](#numbers-and-the--operator)
+    - [Numbers, Strings and the `+` operator](#numbers-strings-and-the--operator)
+    - [Converting Strings to Numbers](#converting-strings-to-numbers)
+      - [parseInt(...)](#parseint)
+        - [Parameters:](#parameters)
+        - [Return Value](#return-value)
+      - [parseFloat(...)](#parsefloat)
+        - [Parameters](#parameters-1)
+        - [Return Value](#return-value-1)
+      - [Number(...)](#number)
+        - [Parameter](#parameter)
+        - [Return Value](#return-value-2)
+      - [Unary +](#unary-)
+  - [Literals](#literals)
+    - [Array Literals](#array-literals)
+    - [Boolean Literals](#boolean-literals)
+    - [Numeric Literals](#numeric-literals)
+    - [Object Literals](#object-literals)
+    - [RegExp Literals](#regexp-literals)
+    - [String Literals](#string-literals)
 
 
 ## Naming
@@ -520,5 +538,102 @@ let a = 2;
 a = "B";
 ```
 
-### [Numbers and the `+` operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#numbers_and_the_operator)
-STUB
+### [Numbers, Strings and the `+` operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#numbers_and_the_operator)
+When a `+` operator is used with a string and a number, the number is automatically typecast to a string. For example:
+
+```
+let a = 'Catch' + 22; // a = 'Catch22'
+let b = '42' + 0; // b = '420'
+```
+
+This behavior does not apply to any other operator:
+
+```
+let a = '22' - 3; // 19
+let b = '5' * 2; // 10
+let c = 'a' / 2; // NaN
+```
+
+### Converting Strings to Numbers
+There are a handful of ways to convert numerical values stored as strings into the number primitive type.
+
+#### [parseInt(...)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt)
+This function parses a string parameter and returns an integer of a certain [radix (base)](https://en.wikipedia.org/wiki/Radix). 
+
+##### Parameters:
+
+* **string:** A string to parse as an integer. Any leading whitespace is ignored.
+* **radix (Optional):** An integer between `2` and `36` representing the base of the passed string. If the radix is nonzero and outside of the range `[2, 36]`, the return value of the operation will be [NaN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN). If the radix is `0` or not provided, the function will interpret the radix based on the format of the string. 
+  * **NOTE:** The parseInt function will not always default to decimal (base 10) when interpreting the radix. It is best practice to always include a radix value. 
+
+##### Return Value
+An integer (number) in the specified radix. 
+
+#### [parseFloat(...)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseFloat)
+This function takes a string representation of a decimal and returns its number value. 
+
+##### Parameters
+* **string**: String to parse as a float
+
+##### Return Value
+A floating point number if the string parameter is parsable, or NaN if not. 
+
+#### [Number(...)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number#number_coercion)
+Coerces the passed parameter as a number if possible. 
+
+##### Parameter
+* **value:** a value of any type. Different values/types are coerced differently. 
+
+##### Return Value
+* `number` --> Returned *as is*
+* `null` --> 0
+* `true` --> 1, `false` --> 0
+* `undefined` --> `NaN`
+* string --> Parsed as if they contain number literals
+
+#### [Unary +](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Unary_plus)
+The unary plus operator can also be used to coerce strings as numbers. It precedes the value to coerce like so:
+
+```
+let a = (+'123'); // 123
+let b = (+'1') + (+'2); // 3
+let c = (+null); // 0
+```
+
+Using the unary plus operator is equivalent to using the Number constructor (`Number(...)`).
+
+## Literals
+Literals are fixed values that are 'literally' specified in a script. JavaScript defines the following literals:
+
+* [Array Literals](#array-literals)
+* [Boolean Literals](#boolean-literals)
+* [Numeric Literals](#numeric-literals)
+* [Object Literals](#object-literals)
+* [RegExp Literals](#regexp-literals)
+* [String Literals](#string-literals)
+
+### Array Literals
+A representation of an [array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#description). More specifically, an array literal is a list of expressions separated by commas and enclosed in square brackets where each expression represents an array element:
+
+```
+// specifies an array of size 3 with elements 1, 2, and 3
+[1, 2, 3]; 
+```
+
+A new array is created every time the array literal is evaluated in the code. For example, an array literal at the top-level, global scope will create an array once when the script/module is loaded, whereas a literal inside a function will create an array every time the function is called.
+
+
+
+### Boolean Literals
+Stub
+
+### Numeric Literals
+
+### Object Literals
+Stub 
+
+### RegExp Literals
+Stub 
+
+### String Literals
+Stub
