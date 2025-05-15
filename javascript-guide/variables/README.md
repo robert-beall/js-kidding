@@ -59,8 +59,13 @@ Variables serve as symbolic names for values in a program.
       - [Unary +](#unary-)
   - [Literals](#literals)
     - [Array Literals](#array-literals)
+      - [Extra Commas](#extra-commas)
+        - [Trailing Commas and Git Diffs](#trailing-commas-and-git-diffs)
+        - [Best Practice](#best-practice)
     - [Boolean Literals](#boolean-literals)
     - [Numeric Literals](#numeric-literals)
+      - [Integer Literals](#integer-literals)
+      - [Floating Point Literals](#floating-point-literals)
     - [Object Literals](#object-literals)
     - [RegExp Literals](#regexp-literals)
     - [String Literals](#string-literals)
@@ -622,12 +627,87 @@ A representation of an [array](https://developer.mozilla.org/en-US/docs/Web/Java
 
 A new array is created every time the array literal is evaluated in the code. For example, an array literal at the top-level, global scope will create an array once when the script/module is loaded, whereas a literal inside a function will create an array every time the function is called.
 
+#### Extra Commas
+Placing two commas in a row, or prepending a comma at the front of an array literal creates an *empty slot* in the array. 
 
+This empty slot is slightly different from `undefined` - when traversing the array, the empty value will be skipped. However, accessing the empty element will return an `undefined`. The size of the array will include the empty elements. 
+
+```
+// creates an array of size 4 with two empty items
+const withEmpties = [, 'a', , 'b']; 
+```
+
+A comma appended to the end of an array literal will be ignored.
+
+##### Trailing Commas and Git Diffs
+Trailing commas tend to be added after the last element of a multiline array literal to clean up Git Diffs. In this way, the previous line does not need to be changed by adding a comma if a new line is added:
+
+```
+const arr = [
+  'a',
+  'b',
+  'c', // <-- no comma needs to be added for new element
+]
+```
+
+##### Best Practice
+It is best practice to either explicitly state undefined elements, or at least add comments specifying empty elements for clarity's sake:
+
+```
+// specifying undefined
+const withUndefined = ['a', undefined, 'b'];
+
+// with comments
+const with Comments = ['a', /* empty */, 'b'];
+```
 
 ### Boolean Literals
-Stub
+A boolean literal can be one of two values: `true` or `false`.
+
+NOTE: Do not confuse the `true` and `false` values of the boolean primitive with those of the [Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean) wrapper class. They are different.
 
 ### Numeric Literals
+Numeric literals include base 10 floating point literals and integer literals in other bases. 
+
+The language specification requires that numeric literals be unsigned, but something like `-101.1` is considered valid because the `-` is treated as a unary operator applied to `101.1`.
+
+#### Integer Literals
+Integer and [BigInt](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt) literals can be written in the following bases:
+* 10 (Decimal)
+* 2 (Binary)
+* 16 (Hexadecimal)
+* 8 (Octal)
+
+The following rules determine which base and format an integer literal is in:
+
+* A sequence of digits *without a leading zero* is a decimal integer literal.
+* A leading `0`, `0o`, or `0O` indicates an octal integer literal, which can include only the digits 0 - 7.
+* A leading `0x` or `0X` indicates a hexadecimal integer literal. Hexadecimal numbers can have the digits 0 - 9 plus the letters A - F (case insensitive).
+* A leading `0b` or `0B` indicates a binary integer literal, which can only have the digits 0 and 1. 
+
+#### Floating Point Literals
+A floating point literal can be composed of the following components:
+* Unsigned decimal integer
+* Decimal point (`.`)
+* Decimal integer representing a fraction
+* An exponent (`e` or `E` followed by an optionally signed decimal integer)
+
+The format of a floating point literal is specified by the following RegExp:
+
+```
+[digits].[digits][(E|e)[(+|-)]digits]
+```
+
+Some examples of floating point literals:
+
+```
+121.2
+-54.2
+1e1 // 10
+2.0E-5
+51E+2
+```
+
 
 ### Object Literals
 Stub 
