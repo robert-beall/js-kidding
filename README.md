@@ -1,5 +1,5 @@
-# js-kidding
-This is a knowledge-hub repo for plain JavaScript.
+# Spiderworks
+This is a knowledge-hub repo for web basics (JavaScript, HTML, CSS, etc.). It's name is inspired by the Lockheed Skunkworks, with spider referring to web technologies.
 
 ## Purpose
 While I have a good handle on JavaScript as a whole, there are always unfamiliar concepts to explore.
